@@ -1,13 +1,34 @@
-# **************************************************************************** #
-#                                                                              #
-#                                                         :::      ::::::::    #
-#    Makefile                                           :+:      :+:    :+:    #
-#                                                     +:+ +:+         +:+      #
-#    By: jdomingu <jdomingu@student.42malaga.com>   +#+  +:+       +#+         #
-#                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2023/03/31 19:05:53 by jdomingu          #+#    #+#              #
-#    Updated: 2023/03/31 19:06:00 by jdomingu         ###   ########.fr        #
-#                                                                              #
-# **************************************************************************** #
 
+NAME		= minishell
+CFLAGS 		= -Wall -Wextra -Werror
+NORMFLAG	= -R CheckForbiddenSourceHeader
+SRC_DIR		= src
+LIBFT_DIR	= libft
+HEADERS		= -I $(LIBFT_DIR)
+FILES		= minishell.c
+SRCS		= $(addprefix $(SRC_DIR)/, $(FILES))
+OBJS		= $(SRCS:.c=.o)
 
+all:		libft $(NAME)
+
+libft:
+				make -C $(LIBFT_DIR)
+
+$(NAME):	$(OBJS)
+				gcc $(CFLAGS) $(SRCS) $(LIBFT_DIR)/libft.a $(HEADERS) -o $(NAME)
+
+%.o:		%.c
+				gcc $(CFLAGS) -c $< -o $@
+
+clean:
+				rm -f $(OBJS)
+
+fclean:		clean
+				rm -f $(NAME)
+
+re:			fclean all
+
+norm:
+				norminette $(NORMFLAG) src
+
+.PHONY:		all clean fclean re norm libft
