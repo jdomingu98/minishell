@@ -1,34 +1,33 @@
+NAME	= minishell
+CFLAGS	= -Wall -Wextra -Werror 
+LIBFT	= libft
+HEADERS = -I $(LIBFT) -I ./includes -I /Users/${USER}/.brew/opt/readline/include
+LIBS 	= $(LIBFT)/libft.a
+SOURCES = src
 
-NAME		= minishell
-CFLAGS 		= -Wall -Wextra -Werror
-NORMFLAG	= -R CheckForbiddenSourceHeader
-SRC_DIR		= src
-LIBFT_DIR	= libft
-HEADERS		= -I $(LIBFT_DIR)
-FILES		= minishell.c
-SRCS		= $(addprefix $(SRC_DIR)/, $(FILES))
-OBJS		= $(SRCS:.c=.o)
+FILES	= minishell.c signals.c
+SRCS	= $(addprefix $(SOURCES)/, $(FILES))
+OBJS	= $(SRCS:.c=.o)
 
-all:		libft $(NAME)
+all:	libft $(NAME)
 
-libft:
-				make -C $(LIBFT_DIR)
+libft:	
+	make -C $(LIBFT)
 
-$(NAME):	$(OBJS)
-				gcc $(CFLAGS) $(SRCS) $(LIBFT_DIR)/libft.a $(HEADERS) -o $(NAME)
+%.o: %.c
+	gcc $(CFLAGS) $(HEADERS) -c $< -o $@
 
-%.o:		%.c
-				gcc $(CFLAGS) -c $< -o $@
+$(NAME): $(OBJS)
+	gcc $(CFLAGS) $(SRCS) $(LIBFT)/libft.a -lreadline -L /Users/${USER}/.brew/opt/read-line/lib $(HEADERS) -o $(NAME)
 
 clean:
-				rm -f $(OBJS)
+	rm -rf $(OBJS)
+	make clean -C $(LIBFT)
 
-fclean:		clean
-				rm -f $(NAME)
+fclean: clean
+	rm -rf $(NAME)
+	rm -rf $(LIBFT)/libft.a
 
-re:			fclean all
+re: fclean all
 
-norm:
-				norminette $(NORMFLAG) src
-
-.PHONY:		all clean fclean re norm libft
+.PHONY: all clean fclean re libft
