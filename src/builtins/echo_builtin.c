@@ -14,7 +14,7 @@ static int	n_flag(char *arg)
 
 	n_flag = 0;
 	i = 0;
-	if (arg[i] != '-')
+	if (ft_strncmp(arg, "-n", 2) != 0)
 		return (n_flag);
 	i = 1;
 	while (arg[i] && arg[i] == 'n')
