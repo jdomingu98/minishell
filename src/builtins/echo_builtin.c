@@ -7,44 +7,48 @@
 *	Returns false = 0 if it contains anything other than - and n (ex. --n -nnnm -n1234)
 *	
 */
-static int	n_flag(char *arg)
+/**
+ * @param flag: the flag of echo
+ * @return:
+ * 		TRUE if the flag is "-n" (there can be more than one "n")
+ * 		FALSE otherwise
+*/
+static bool	check_if_n_flag(char *flag)
 {
 	int		i;
-	int	n_flag;
 
-	n_flag = 0;
-	i = 0;
-	if (ft_strncmp(arg, "-n", 2) != 0)
-		return (n_flag);
+	if (ft_strncmp(flag, "-n", 2) != 0)
+		return (false);
 	i = 1;
-	while (arg[i] && arg[i] == 'n')
+	while (flag[i] && flag[i] == 'n')
 		i++;
-	if (!arg[i])
-		n_flag = 1;
-	return (n_flag);
+	return (!flag[i]);
 }
-
-//echo -n hola
-//echo hola
-//echo -n
 
 /* echo_print_args:
 *	Prints the given array of aruments to STDOUT.
 */
-static void	echo_print(char **args, int n_flag, int i)
+
+/**
+ * @param args: 
+ * @param n_flag:
+ * @param i:
+ * @description: Prints the string args[i]. A new line if "-n" flag is not set
+ * @return: nothing
+*/
+static void	print_echo_string(char **args, int nflag, int i)
 {
-	if (!args[i] && !n_flag)
+	if (!args[i] && !nflag)
 	{
 		ft_putchar_fd('\n', STDOUT_FILENO);
 		return ;
 	}
-
 	while (args[i])
 	{
 		ft_putstr_fd(args[i], STDOUT_FILENO);
 		if (args[i + 1])
 			ft_putchar_fd(' ', STDOUT_FILENO);
-		else if (!args[i + 1] && !n_flag)
+		else if (/*!args[i + 1] &&*/ !nflag)
 			ft_putchar_fd('\n', STDOUT_FILENO);
 		i++;
 	}
@@ -56,19 +60,25 @@ static void	echo_print(char **args, int n_flag, int i)
 *	Returns 1 on completion.
 */
 
+/**
+ * @param args: Contains the echo command ¿?
+ * @description:
+ * 		This function acts like the echo commando of the shell bash.
+ * @return: 1 ¿?
+*/
+
 int	echo_builtin(char **args)
 {
 	int		i;
-	int	flag;
+	bool	flag;
 
-
-	flag = 0;
+	flag = check_if_n_flag(args[1]);
 	i = 1;
-	while (args[i] && n_flag(args[i]))
+	while (args[i] && flag)
 	{
-		flag = 1;
 		i++;
+		flag = check_if_n_flag(args[i]);
 	}
-	echo_print(args, flag, i);
+	print_echo_string(args, flag, i);
 	return (1);
 }
