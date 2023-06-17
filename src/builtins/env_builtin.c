@@ -4,7 +4,7 @@
 /* env_builtin:
 *	Executes the builtin env command: Prints the environment variables.
 */
-int	env_builtin(t_data *data, char **args)
+/*int	env_builtin(t_data *data, char **args)
 {
 	int	i;
 
@@ -16,5 +16,5 @@ int	env_builtin(t_data *data, char **args)
 	while (data->env[i])
 		ft_putendl_fd(data->env[i++], STDOUT_FILENO);
 	return (EXIT_SUCCESS);
-}
+}*/
 

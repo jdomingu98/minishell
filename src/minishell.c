@@ -8,7 +8,7 @@ void free_data_envs(t_data *data, int i, bool is_export_env)
 	while (++j < i)
 	{
 		free(data->env[j]);
-		free(data->env_export[j]);
+		free(data->export_env[j]);
 	}
 	if (is_export_env)
 		free(data->env[j]);
@@ -30,8 +30,8 @@ static void	init_environment(t_data *data, char **env)
 
 	i = -1;
 	data->env = ft_calloc(get_env_size(env) + 1, sizeof(char **));
-	data->env_export = ft_calloc(get_env_size(env) + 1, sizeof(char **));
-	if (!data->env || !data->env_export)
+	data->export_env = ft_calloc(get_env_size(env) + 1, sizeof(char **));
+	if (!data->env || !data->export_env)
 		return ;
 	while(env[++i])
 	{
@@ -41,7 +41,7 @@ static void	init_environment(t_data *data, char **env)
 			free_data_envs(data, i, false);
 			return ;
 		}
-		data->env_export[i] = ft_strdup(env[i]);
+		data->export_env[i] = ft_strdup(env[i]);
 		if (!data->export_env[i])
 		{
 			free_data_envs(data, i, true);
@@ -77,11 +77,11 @@ int	main(int argc, char **argv, char **envp)
 	while (42)
 	{
 		set_interactive_signals();
-		line = readline("MiniShellAny% > ");
-		add_history(line);
+		input = readline("MiniShellAny% > ");
+		add_history(input);
 		set_non_interactive_signals();
 		//data->command_list = analyze_line(&line, data);
-		free(line);
+		free(input);
 
 	}
 	return (0);

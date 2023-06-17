@@ -6,7 +6,7 @@
 *	current working directory path.
 *	Returns 0 if successful, 1 if an error occured.
 */
-int	pwd_builtin(t_data *data, char **args)
+/*int	pwd_builtin(t_data *data, char **args)
 {
 	//char	buf[PATH_MAX];
 	char	*cwd;
@@ -26,5 +26,5 @@ int	pwd_builtin(t_data *data, char **args)
 	}
 	errmsg_cmd("pwd", NULL, strerror(errno), errno);
 	return (EXIT_FAILURE);
-}
+}*/
  
