@@ -1,15 +1,24 @@
+
 NAME	 = minishell
 LIBFT	 = libft
 # =================================================================================
-CFLAGS	 = -Wall -Wextra -Werror 
-HEADERS  = -I $(LIBFT) -I /Users/${USER}/.brew/opt/readline/include
-LIBS 	 = $(LIBFT)/libft.a -lreadline -L /Users/${USER}/.brew/opt/read-line/lib
+
+CFLAGS	 = -Wall -Wextra -Werror #-g -fsanitize=address
+HEADERS  = -I $(LIBFT) -I /Users/${USER}/.brew/opt/readline/include -I src
+LIBS 	 = $(LIBFT)/libft.a -lreadline -L /Users/${USER}/.brew/opt/readline/lib
 # =================================================================================
+
 SRC_DIR  = src
-BUILTINS_DIR = $(SRC_DIR)/builtins
+BUILTINS_DIR = src/builtins/
+UTILS_DIR = src/utils/
 # =================================================================================
-FILES	 = minishell.c signals.c
-SRCS	 = $(addprefix $(SRC_DIR)/, $(FILES))
+
+UTILS_FILES = signals.c
+UTILS_SRCS = $(addprefix $(UTILS_DIR), $(UTILS_FILES))
+
+FILES	 = minishell.c
+SRCS	 = $(addprefix $(SRC_DIR)/, $(FILES)) $(UTILS_SRCS)
+
 OBJS	 = $(SRCS:.c=.o)
 # =================================================================================
 
@@ -19,7 +28,7 @@ all:	 libft $(NAME)
 	gcc $(CFLAGS) $(HEADERS) -c $< -o $@
 
 libft:
-	make -C $(LIBFT)
+	make bonus -C $(LIBFT)
 
 $(NAME): $(OBJS)
 	gcc $(CFLAGS) $(SRCS) $(LIBS) $(HEADERS) -o $(NAME)
