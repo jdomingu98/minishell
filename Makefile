@@ -2,7 +2,7 @@ NAME	 = minishell
 LIBFT	 = libft
 # =================================================================================
 CFLAGS	 = -Wall -Wextra -Werror 
-HEADERS  = -I $(LIBFT) -I ./includes -I /Users/${USER}/.brew/opt/readline/include
+HEADERS  = -I $(LIBFT) -I /Users/${USER}/.brew/opt/readline/include
 LIBS 	 = $(LIBFT)/libft.a -lreadline -L /Users/${USER}/.brew/opt/read-line/lib
 # =================================================================================
 SRC_DIR  = src
@@ -16,13 +16,13 @@ OBJS	 = $(SRCS:.c=.o)
 all:	 libft $(NAME)
 
 %.o:	 %.c
-	 gcc $(CFLAGS) $(HEADERS) -c $< -o $@
+	gcc $(CFLAGS) $(HEADERS) -c $< -o $@
 
 libft:
-	 make -C $(LIBFT)
+	make -C $(LIBFT)
 
 $(NAME): $(OBJS)
-	 gcc $(CFLAGS) $(SRCS) $(LIBS) $(HEADERS) -o $(NAME)
+	gcc $(CFLAGS) $(SRCS) $(LIBS) $(HEADERS) -o $(NAME)
 
 clean:
 	make clean -C $(LIBFT)
