@@ -31,19 +31,31 @@
             fstat, unlink, execve, dup, dup2, pipe, isatty, ttyname,
             ttyslot, tcgetattr, tcgetattr
     stdlib: malloc, free, exit, getenv, STDIN_FILENO, STDOUT_FILENO, STDERR_FILENO
-
-	+ libft functions
+	libft functions
 */
 
 /* ================================================= GLOBAL VARIABLES ================================================= */
 
 /**
- * @name: g_status_code
- * @description:
- * 		Contains the latest status code of the command executed.
- * 		Used as a return value in the command "$?".
+ * @name: struct t_g_state
+ * @description: Stores the data of the command state.
+ * 		@var: status_code
+ * 		@description: Last status command exit code.
+ * 		
+ * 		@var: process_id
+ * 		@description: Process id of the current command executed.
 */
-int	g_status_code;
+typedef struct s_g_state
+{
+	int		status_code;
+	pid_t	process_id;
+}	t_g_state;
+
+/**
+ *	@name: t_g_state status
+ *	@description: A global variable to be used for setting the last status code. Is used in the command "$?"
+ */
+extern t_g_state status;
 
 /* ============================================= STRUCTURES AND ENUMERATIONS =========================================== */
 
@@ -66,16 +78,16 @@ int	g_status_code;
  * 		@description: A double quote (")
  *  
  *  	@state: VARIABLE_DQUOTE
- * 		@descirption: TBA
+ * 		@description: TBA
 */
 typedef enum e_lex_state
 {
-	INIT, //LEX_START
-	STRING, // LEX_WORD
-	QUOTE, //LEX_SIMPLE_QUOTE
-	VARIABLE, //LEX_VAR
-	DQUOTE, //LEX_DOUBLE_QUOTE
-	VARIABLE_DQUOTE //LEX_VAR_DOUBLE_QUOTE
+	L_INIT, //LEX_START
+	L_STRING, // LEX_WORD
+	L_QUOTE, //LEX_SIMPLE_QUOTE
+	L_VARIABLE, //LEX_VAR
+	L_DQUOTE, //LEX_DOUBLE_QUOTE
+	L_VARIABLE_DQUOTE //LEX_VAR_DOUBLE_QUOTE
 }	t_lex_state; //t_lex_st
 
 /**
@@ -97,16 +109,16 @@ typedef enum e_lex_state
  * 		@description: The symbol '<<'
  *  
  *  	@value: PIPE
- * 		@descirption: The symbol '|'
+ * 		@description: The symbol '|'
 */
 typedef enum e_token
 {
-	STRING, //TOK_WORD
-	REDIR_IN, //REDIR_IN
-	REDIR_OUT, //TOK_REDIR_OUT
-	APPEND, // TOK_REDIR_OUT_APPEND
-	HEREDOC, //TOK_HDOC
-	PIPE //TOK_PIPE
+	T_STRING, //TOK_WORD
+	T_REDIR_IN, //REDIR_IN
+	T_REDIR_OUT, //TOK_REDIR_OUT
+	T_APPEND, // TOK_REDIR_OUT_APPEND
+	T_HEREDOC, //TOK_HDOC
+	T_PIPE //TOK_PIPE
 }	t_token; //t_token_type
 
 /**
@@ -135,37 +147,37 @@ typedef struct s_token_data
  * 		@description: Initial state
  * 		
  * 		@state: COMMAND
- * 		@description: TBA
+ * 		@description: Command. Is stored in data->commands.
  * 		
  * 		@state: REDIR_IN
- * 		@description: TBA
+ * 		@description: IN redirection
  *  
  * 		@state: REDIR_OUT
- * 		@description: TBA
+ * 		@description: OUT redirection
  *  	
  * 		@state: APPEND
- * 		@description: TBA
+ * 		@description: Append state
  *  
  *  	@state: HEREDOC
- * 		@descirption: TBA
+ * 		@description: Heredoc state.
  * 	
  * 		@state: INVALID
- * 		@descirption: Invalid state. Will show an error.
+ * 		@description: Invalid state. Will show an error.
 */
 typedef enum e_pars_state
 {
-	INIT, //PARS_START
-	COMMAND, //PARS_COMMAND
-	REDIR_IN, //PARS_REDIR_IN
-	REDIR_OUT, //PARS_REDIR_OUT
-	APPEND, //PARS_REDIR_OUT_APPEND
-	HEREDOC, //PARS_REDIR_IN_HEREDOC
-	INVALID //PARS_INVALID
+	P_INIT, //PARS_START
+	P_COMMAND, //PARS_COMMAND
+	P_REDIR_IN, //PARS_REDIR_IN
+	P_REDIR_OUT, //PARS_REDIR_OUT
+	P_APPEND, //PARS_REDIR_OUT_APPEND
+	P_HEREDOC, //PARS_REDIR_IN_HEREDOC
+	P_INVALID //PARS_INVALID
 }	t_pars_state; //t_pars_st
 
 /**
  * @name: enum t_error
- * @description: Enumerates the types of error that will occur while parsing the command
+ * @description: Enumerates the types of error that will occur while parsing the command. All the parser states return a t_error value.
  * 		@value: SYNTAX
  * 		@description: Syntax Error
  * 		
@@ -185,39 +197,6 @@ typedef enum e_error
 	NOT_FOUND, //PARS_NO_SUCH_FILE_OR_DIR
 	NO_ERROR //PARS_NO_ERROR
 }	t_error; //t_pars_err
-
-
-/**
- * @name: struct t_key
- * @description: Stores the key data of the struct t_dictionary
- * 		@var: name
- * 		@description: The variable name
- * 		
- * 		@var: only_in_export
- * 		@description:
- * 			TRUE if the variable is only present in the export builtin
- * 			FALSE if is presente in both envs
-*/
-typedef struct s_key
-{
-	char	*name;
-	bool	only_in_export;
-}	t_key;
-
-/**
- * @name: struct t_dictionary
- * @description: Stores the environment data using a dictionary data structure
- * 		@var: t_key key
- * 		@description: The unique key of the dictionary
- * 		
- * 		@var: value
- * 		@description: The value of the key
-*/
-typedef struct s_dictionary
-{
-	t_key	key;
-	char	*value;
-}	t_dictionary;
 
 /**
  * @name: struct t_command
@@ -246,14 +225,17 @@ typedef struct	s_command
  * @name: struct t_data
  * @description: Stores all useful data used during the execution of the minishell.
  * 		@var: env
- * 		@description: Copy of the envp variable of the main function as a dictionary data structure.
+ * 		@description: Copy of the envp variable of the main function.
+ * 
+ * 		@var: env_export
+ * 		@description: Copy of the envp variable of the main function. Used in export builtin
  * 		
  * 		@var: t_list commands
  * 		@description:
  * 			List of read commands.
  * 			The type t_list is located in libft.h
  * 			The attribute "void *content" of the t_list struct is now casting to a "t_command* content" attribute.
- *  
+ *
  * 		@var: dup_stdin
  * 		@description: TBA
  * 	
@@ -262,15 +244,16 @@ typedef struct	s_command
 */
 typedef struct s_data
 {
-	t_list		*env;
+	char		**env;
 	t_list		*command_list; //commands
+	char		**export_env;
 	int			dup_stdin;
 	int			dup_stdout;
 }	t_data;
 
 /* ===================================================== FUNCTIONS ==================================================== */
 
-/* ========================================= BASE DIRECTORY ======================================= */
+/* ============================================ SIGNALS =========================================== */
 
 void	set_interactive_signals(void);
 void	set_non_interactive_signals(void);
