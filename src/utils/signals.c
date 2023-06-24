@@ -1,5 +1,10 @@
 #include "minishell.h"
 
+/**
+ * @description: Specifies the handler of the ctrl+C signal while the minishell is interactive
+ * @param signal: The signal number (not used)
+ * @return: nothing.
+*/
 static void	new_prompt(int signal)
 {
 	(void) signal;
@@ -9,6 +14,10 @@ static void	new_prompt(int signal)
 	rl_redisplay();
 }
 
+/**
+ * @description: Specifies the behaviour of the SIGQUIT and SIGINT while the minishell is interactive
+ * @return: nothing.
+*/
 void	set_interactive_signals(void)
 {
 	struct sigaction	sigint_act;
@@ -22,12 +31,21 @@ void	set_interactive_signals(void)
 	sigaction(SIGQUIT, &sigquit_act, NULL);
 }
 
+/**
+ * @description: Specifies the handler of the ctrl+C and ctrl+\ signals while the minishell is non interactive
+ * @param signal: The signal number (not used)
+ * @return: nothing.
+*/
 static void	print_line(int signal)
 {
 	(void) signal;
 	rl_on_new_line();
 }
 
+/**
+ * @description: Specifies the behaviour of the SIGQUIT and SIGINT while the minishell is non interactive
+ * @return: nothing.
+*/
 void	set_non_interactive_signals(void)
 {
 	struct sigaction	act;

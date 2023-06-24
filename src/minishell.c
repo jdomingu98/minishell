@@ -1,66 +1,42 @@
 #include "minishell.h"
 
-void free_data_envs(t_data *data, int i, bool is_export_env)
+/**
+ * @description: With the line read generates a list of token (lexer)
+ * 		With the list of tokens generates the data of the command list (parser)
+ * @param input_line: The input that had been read earlier
+ * @param data: The data structure
+ * @return: The data structure stored in memory and with the env copies added
+*/
+t_list	*get_command_list(char **input_line, t_data *data)
 {
-	int	j;
 
-	j = -1;
-	while (++j < i)
-	{
-		free(data->env[j]);
-		free(data->export_env[j]);
-	}
-	if (is_export_env)
-		free(data->env[j]);
 }
 
-static size_t	get_env_size(char **env)
-{
-	int	i;
 
-	i = 0;
-	while (env && env[i])
-		i++;
-	return (i);
-}
-
-static void	init_environment(t_data *data, char **env)
-{
-	int i;
-
-	i = -1;
-	data->env = ft_calloc(get_env_size(env) + 1, sizeof(char **));
-	data->export_env = ft_calloc(get_env_size(env) + 1, sizeof(char **));
-	if (!data->env || !data->export_env)
-		return ;
-	while(env[++i])
-	{
-		data->env[i] = ft_strdup(env[i]);
-		if (!data->env[i])
-		{
-			free_data_envs(data, i, false);
-			return ;
-		}
-		data->export_env[i] = ft_strdup(env[i]);
-		if (!data->export_env[i])
-		{
-			free_data_envs(data, i, true);
-			return ;
-		}
-	}
-}
-
-static t_data	*init_data(char **envp)
+/**
+ * @description: Initialized the data structure and fill part of it with the env copies.
+ * @param env: The original env variable
+ * @return: The data structure stored in memory and with the env copies added
+*/
+static t_data	*init_data(char **env)
 {
 	t_data *data;
 
 	data = ft_calloc(1, sizeof(t_data));
-	init_environment(data, envp);
+	if (!data)
+		return (NULL);
+	data->env = copy_env(env);
+	if (!(data->env))
+		return(free(data), NULL);
+	data->export_env = copy_env(env);
+	if (!(data->export_env))
+		return(free(data->env), free(data), NULL);
 	return (data);
 }
 
 /**
- * @description: The main function
+ * @description: The main function.
+ * 	Reads the command input, adds it to the history and call the functions to analyze and parse the command.
  * @param argc: Argument counter
  * @param argv: List of arguments
  * @param envp: Environment path
@@ -74,15 +50,23 @@ int	main(int argc, char **argv, char **envp)
 	(void) argc;
 	(void) argv;
 	data = init_data(envp);
+	if (!data)
+		return (EXIT_FAILURE);
 	while (42)
 	{
 		set_interactive_signals();
 		input = readline("MiniShellAny% > ");
 		add_history(input);
 		set_non_interactive_signals();
-		//data->command_list = analyze_line(&line, data);
+		data->command_list = get_command_list(&input, data);
 		free(input);
-
+		if(!data->command_list)
+			continue ;
+		if (ft_lstsize(data->command_list) == 1)
+			status.status_code = execute_input(data);//
+		else if (ft_lstsize(data->command_list) > 1)
+			status.status_code = execute_with_pipe(data); //
+		//pars_free_command_list(&(data->command_list));
 	}
-	return (0);
+	return (EXIT_SUCCESS);
 }
