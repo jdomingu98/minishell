@@ -8,7 +8,7 @@
 static void	new_prompt(int signal)
 {
 	(void) signal;
-	ft_putchar_fd('\n', 1);
+	ft_putendl_fd("", STDOUT_FILENO);
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();

@@ -237,23 +237,21 @@ typedef struct	s_command
  * 			The attribute "void *content" of the t_list struct is now casting to a "t_command* content" attribute.
  *
  * 		@var: dup_stdin
- * 		@description: TBA
+ * 		@description: Duplicate of STDIN_FILENO. Needed for redirection.
  * 	
  * 		@var: dup_stdout
- * 		@description: TBA
+ * 		@description: Duplicate of STDOUT_FILENO. Needed for redirection.
 */
 typedef struct s_data
 {
 	char		**env;
 	t_list		*command_list; //commands
 	char		**export_env;
-	int			dup_stdin;
-	int			dup_stdout;
+	int			stdin_dup;
+	int			stdout_dup;
 }	t_data;
 
 /* ===================================================== FUNCTIONS ==================================================== */
-
-
 
 /* ============================================ SIGNALS =========================================== */
 
@@ -265,6 +263,13 @@ void	set_non_interactive_signals(void);
 char	**copy_env(char** env);
 size_t	calc_env_size(char **env);
 void	free_env_copy(char **env, int last_index);
+
+/* ============================================== LEXER =========================================== */
+
+
+void	apppend_lexer_token(t_list **tokens, char **command);
+void	free_lexer_token_data(void *token);
+t_list	*new_lexer_token(t_token token_type, char *value);
 
 /* ============================================ BUILTINS ========================================== */
 
