@@ -48,7 +48,7 @@ static void	print_echo_string(char **args, int nflag, int i)
 		ft_putstr_fd(args[i], STDOUT_FILENO);
 		if (args[i + 1])
 			ft_putchar_fd(' ', STDOUT_FILENO);
-		else if (/*!args[i + 1] &&*/ !nflag)
+		else if (!args[i + 1] && !nflag)
 			ft_putchar_fd('\n', STDOUT_FILENO);
 		i++;
 	}

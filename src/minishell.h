@@ -61,7 +61,7 @@ extern t_g_state status;
 
 /**
  * @name: enum t_lex_state
- * @description: Enumerates the states of the lexer state machine. see first diagram in README.md
+ * Enumerates the states of the lexer state machine. see first diagram in README.md
  * 		@state: INIT
  * 		@description: Initial state
  * 		
@@ -70,24 +70,16 @@ extern t_g_state status;
  * 		
  * 		@state: QUOTE
  * 		@description: A simple quote (')
- *  
- * 		@state: VARIABLE
- * 		@description: TBA
  *  	
  * 		@state: DQUOTE
  * 		@description: A double quote (")
- *  
- *  	@state: VARIABLE_DQUOTE
- * 		@description: TBA
 */
 typedef enum e_lex_state
 {
 	L_INIT, //LEX_START
 	L_STRING, // LEX_WORD
 	L_QUOTE, //LEX_SIMPLE_QUOTE
-	L_VARIABLE, //LEX_VAR
-	L_DQUOTE, //LEX_DOUBLE_QUOTE
-	L_VARIABLE_DQUOTE //LEX_VAR_DOUBLE_QUOTE
+	L_DQUOTE //LEX_DOUBLE_QUOTE
 }	t_lex_state; //t_lex_st
 
 /**
@@ -251,27 +243,32 @@ typedef struct s_data
 	int			stdout_dup;
 }	t_data;
 
-/* ===================================================== FUNCTIONS ==================================================== */
+/* ==================================================== FUNCTIONS ==================================================== */
 
-/* ============================================ SIGNALS =========================================== */
+/* ========================================== SIGNALS ========================================== */
 
 void	set_interactive_signals(void);
 void	set_non_interactive_signals(void);
 
-/* ============================================ ENV_UTILS ========================================= */
+/* ========================================== ENV_UTILS ========================================== */
 
 char	**copy_env(char** env);
 size_t	calc_env_size(char **env);
 void	free_env_copy(char **env, int last_index);
 
-/* ============================================== LEXER =========================================== */
+/* ========================================== LEXER ========================================== */
 
-
-void	apppend_lexer_token(t_list **tokens, char **command);
+t_list	*lexer_analysis(char *input);
+void	transist(t_lex_state *current_state, char ch_read);
+void	apppend_lexer_token(t_list **tokens, char *cmd);
 void	free_lexer_token_data(void *token);
 t_list	*new_lexer_token(t_token token_type, char *value);
 
-/* ============================================ BUILTINS ========================================== */
+/* ========================================== PARSER ========================================== */
+
+t_list  *parser_analysis(t_list *tokens_list, t_data *data);
+
+/* ========================================== BUILTINS ========================================== */
 
 
 #endif

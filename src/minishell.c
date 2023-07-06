@@ -18,10 +18,10 @@ static t_list	*get_command_list(char *input_line, t_data *data)
 		// exit_shell(data, status.status_code);
 	}
 	//expand_variables(&input, data, 0); //
-	tokens_list = lexer_analysis(input_line, data); //
+	tokens_list = lexer_analysis(input_line);
 	if (!tokens_list)
 		return (NULL);
-	commands_list = parser_analysis(tokens_list, data); //
+	commands_list = parser_analysis(tokens_list, data);
 	ft_lstclear(&tokens_list, &free_lexer_token_data);
 	return (commands_list);
 }
