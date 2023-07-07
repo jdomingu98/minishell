@@ -255,6 +255,13 @@ void	set_non_interactive_signals(void);
 char	**copy_env(char** env);
 size_t	calc_env_size(char **env);
 void	free_env_copy(char **env, int last_index);
+int		delete_env_var(t_data *data, int index);
+int		add_env_var(t_data *data, char *key, char *value);
+int		get_env_index(char **env, char *var);
+int		delete_export_var(t_data *data, int index);
+char	*get_env_value(t_data *data, char *key);
+int		set_export_env_var(t_data *data, char *key, char *value);
+char	**split_env(char *str);
 
 /* ========================================== LEXER ========================================== */
 
@@ -269,6 +276,12 @@ t_list	*new_lexer_token(t_token token_type, char *value);
 t_list  *parser_analysis(t_list *tokens_list, t_data *data);
 
 /* ========================================== BUILTINS ========================================== */
-
+int	echo_builtin(char **args);
+int	cd_builtin(t_command *cmd, t_data *data);
+int	env_builtin(t_command *cmd, t_data *data);
+int	exit_builtin(t_command *cmd, t_data *data);
+int	export_builtin(t_command *cmd, t_data *data);
+int	pwd_builtin(void);
+int	unset_builtin(t_command *cmd, t_data *data);
 
 #endif
