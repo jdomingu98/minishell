@@ -1,30 +1,19 @@
 
 #include "minishell.h"
 
-/* pwd_builtin:
-*	Executes the builtin pwd command and displays the
-*	current working directory path.
-*	Returns 0 if successful, 1 if an error occured.
-*/
-/*int	pwd_builtin(t_data *data, char **args)
+int	pwd_builtin(void)
 {
-	//char	buf[PATH_MAX];
 	char	*cwd;
+	int		code_number;
 
-	(void)args;
-	(void) data;
-	if (data->working_dir)
-	{
-		ft_putendl_fd(data->working_dir, STDOUT_FILENO);
-		return (EXIT_SUCCESS);
-	}
+	code_number = 0;
 	cwd = getcwd(NULL, 0);
-	if (cwd)
+	if(!cwd)
 	{
-		ft_putendl_fd(cwd, STDOUT_FILENO);
-		return (EXIT_SUCCESS);
+		code_number = 1;
+		return(code_number);
 	}
-	errmsg_cmd("pwd", NULL, strerror(errno), errno);
-	return (EXIT_FAILURE);
-}*/
- 
+	ft_printf("%s\n", cwd);
+	free(cwd);
+	return (code_number);
+}
