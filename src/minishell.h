@@ -255,13 +255,12 @@ void	set_non_interactive_signals(void);
 char	**copy_env(char** env);
 size_t	calc_env_size(char **env);
 void	free_env_copy(char **env, int last_index);
-int		delete_env_var(t_data *data, int index);
-int		add_env_var(t_data *data, char *key, char *value);
-int		get_env_index(char **env, char *var);
-int		delete_export_var(t_data *data, int index);
 char	*get_env_value(t_data *data, char *key);
-int		set_export_env_var(t_data *data, char *key, char *value);
+int		get_env_index(char **env, char *var);
+int		add_to_env(char **env, char *key, char *value);
+int		delete_line_env(char **env, int pos);
 char	**split_env(char *str);
+void	free_split(char **args);
 
 /* ========================================== LEXER ========================================== */
 

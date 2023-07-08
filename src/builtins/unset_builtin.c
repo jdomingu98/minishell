@@ -30,9 +30,7 @@ int	unset_builtin(t_command *cmd, t_data *data)
 	int	code_number;
 
 	code_number = 0;
-	if (cmd->argc == 1)
-		;
-	else if (cmd->argc > 1)
+	if (cmd->argc > 1)
 		code_number = unset_vars(cmnd, data);
 	return (code_number);
 }

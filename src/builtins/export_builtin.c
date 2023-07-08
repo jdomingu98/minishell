@@ -1,46 +1,29 @@
 
 #include "minishell.h"
 
-void	free_split(char **arg)
+static bool	check_valid_key(char *arg)
 {
-	int	i;
+	char	**key_value;
+	size_t	i;
+	bool	valid;
 
-	i = 0;
-	//if (!arg)
-	//	return ;
-	while (arg[i])
-	{
-		free(arg[i]);
-		i++;
-	}
-	free(arg);
-}
-
-static int	is_valid_key(char *arg)
-{
-	char	**valid_key;
-	char	*invalid_arg;
-	int		i;
-	int		code_number;
-
-	i = 0;
-	code_number = 1;
-	invalid_arg = ":-!/?+^.,";
 	if (arg[0] == '=')
-		return (0);
-	valid_key = ft_split(arg, '=');
-	while (((i < (int)ft_strlen(valid_key[0]))) && (code_number == 1))
+		return (false);
+	key_value = ft_split(arg, '=');
+	i = 0;
+	valid = true;
+	while (valid && i < ft_strlen(key_value[0]))
 	{
-		if (ft_strchr(invalid_arg, valid_key[0][i])
-			|| ft_isdigit(valid_key[0][0]))
-			code_number = 0;
+		if (ft_strchr("+-.,:/!?^", key_value[0][i])
+			|| ft_isdigit(key_value[0][i]))
+			valid = false;
 		i++;
 	}
-	free_split(valid_key);
-	return (result);
+	free_split(key_value);
+	return (valid);
 }
 
-static int	set_vars(t_command *cmd, t_data *data)
+static int	add_vars_to_envs(t_data *data,  t_command *cmd)
 {
 	int		i;
 	char	**args;
@@ -50,15 +33,15 @@ static int	set_vars(t_command *cmd, t_data *data)
 	args = cmd->args;
 	while (++i < cmd->args)
 	{
-		if (is_valid_key(args[i]))
+		if (check_valid_key(args[i]))
 		{
 			if (!ft_strchr(args[i], '='))
-				set_export_env_var(data, args[i], "");
+				add_to_env(data->export_env, args[i], "");
 			else
 			{
-				 export_line = ft_split(args[i], '=');
-				add_env_var(data, export_line[0], export_line[1]);
-				set_export_env_var(data, export_line[0], export_line[1]);
+				export_line = split_env(args[i]);
+				add_to_env(data->env, export_line[0], export_line[1]);
+				add_to_env(data->export_env, export_line[0], export_line[1]);
 				free_split(export_line);
 			}
 		}
@@ -74,14 +57,15 @@ int	export_builtin(t_command *cmd, t_data *data)
 	char	**export_line;
 	int		code_number;
 	int		i;
+	
 
 	code_number = 0;
 	if (cmd->ac == 1)
 	{
 		i = 0;
-		while ((data->export_env)[i])
+		while (data->export_env[i])
 		{
-			export_line = ft_split(data->export_env[i], '=');
+			export_line = split_env(data->export_env[i]);
 			if (!export_line[1])
 				printf("declare -x %s\n", export_line[0]);
 			else
@@ -91,6 +75,6 @@ int	export_builtin(t_command *cmd, t_data *data)
 		}
 	}
 	else if (cmd->ac > 1)
-		code_number = set_vars(cmd, data);
+		code_number = add_vars_to_envs(data, cmd);
 	return (code_number);
 }

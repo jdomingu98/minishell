@@ -54,7 +54,7 @@ int	cd_builtin(t_command *cmd, t_data *data)
 	else if (cmd->ac == 2 && ft_strncmp(cmd->args[1], ".", 2) == 0)
 	{
 		aux_path = get_env_value(data, "PWD");
-		code_number = add_env_var(data, "OLDPWD", aux_path);
+		code_number = add_to_env(data->env, "OLDPWD", aux_path);
 		free(aux_path);
 	}
 	else if (cmd->ac >= 2)

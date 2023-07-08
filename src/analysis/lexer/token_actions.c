@@ -16,18 +16,18 @@ void	transist(t_lex_state *current_state, char ch_read)
 		*current_state = L_INIT;
 }
 
-void	apppend_lexer_token(t_list **tokens, char *cmd) //???
+void	apppend_lexer_token(t_list **tokens, char *cmd)
 {
 	t_token_data	*last_token;
-	char			*substr;
-	char			*aux;
+	char			*read;
+	char			*new_value;
 
 	last_token = ft_lstlast(*tokens)->content;
-	substr = ft_substr(cmd, 0, 1);
-	aux = ft_strjoin(last_token->value, substr);
-	free(substr);
+	read = ft_substr(cmd, 0, 1);
+	new_value = ft_strjoin(last_token->value, read);
+	free(read);
 	free(last_token->value);
-	last_token->value = aux;
+	last_token->value = new_value;
 }
 
 t_list	*new_lexer_token(t_token token_type, char *value)

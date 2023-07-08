@@ -77,7 +77,7 @@ t_list	*lexer_analysis(char *input)
 	}
 	if (current_state == L_QUOTE || current_state == L_DQUOTE)
 	{
-		// print_error
+		print_error("lexer", "syntax error", "quote not closed", 0);
 		return(free_lexer_token_data(&token_list), NULL);
 	}
 	return (token_list);

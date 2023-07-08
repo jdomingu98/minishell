@@ -13,7 +13,7 @@ int	pwd_builtin(void)
 		code_number = 1;
 		return(code_number);
 	}
-	ft_printf("%s\n", cwd);
+	ft_putendl_fd(cwd, STDOUT_FILENO);
 	free(cwd);
 	return (code_number);
 }
