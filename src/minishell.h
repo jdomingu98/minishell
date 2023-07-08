@@ -1,7 +1,7 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-/* ===================================================== LIBRARIES ==================================================== */
+/* ================================ LIBRARIES ================================ */
 
 # include <stdio.h> //readline, rl_clear_history, rl_on_new_line, rl_replace_line, rl_redisplay, add_history, printf, perror
 # include <readline/readline.h> //readline, rl_clear_history, rl_on_new_line, rl_replace_line, rl_redisplay, add_history
@@ -28,13 +28,13 @@
 # include "libft.h"
 /*
     unistd: write, access, read, close, fork, getcwd, chdir, lstat,
-            fstat, unlink, execve, dup, dup2, pipe, isatty, ttyname,
-            ttyslot, tcgetattr, tcgetattr
+        fstat, unlink, execve, dup, dup2, pipe, isatty, ttyname,
+        ttyslot, tcgetattr, tcgetattr
     stdlib: malloc, free, exit, getenv, STDIN_FILENO, STDOUT_FILENO, STDERR_FILENO
 	libft functions
 */
 
-/* ================================================= GLOBAL VARIABLES ================================================= */
+/* ================================ GLOBAL VARIABLES ================================ */
 
 /**
  * @name: struct t_g_state
@@ -55,9 +55,9 @@ typedef struct s_g_state
  *	@name: t_g_state status
  *	@description: A global variable to be used for setting the last status code. Is used in the command "$?"
  */
-extern t_g_state status;
+extern t_g_state	g_status;
 
-/* ============================================= STRUCTURES AND ENUMERATIONS =========================================== */
+/* ================================ STRUCTURES AND ENUMERATIONS ================================ */
 
 /**
  * @name: enum t_lex_state
@@ -80,7 +80,7 @@ typedef enum e_lex_state
 	L_STRING, // LEX_WORD
 	L_QUOTE, //LEX_SIMPLE_QUOTE
 	L_DQUOTE //LEX_DOUBLE_QUOTE
-}	t_lex_state; //t_lex_st
+} t_lex_state; //t_lex_st
 
 /**
  * @name: enum t_token
@@ -111,7 +111,7 @@ typedef enum e_token
 	T_APPEND, // TOK_REDIR_OUT_APPEND
 	T_HEREDOC, //TOK_HDOC
 	T_PIPE //TOK_PIPE
-}	t_token; //t_token_type
+} t_token; //t_token_type
 
 /**
  * @name: struct t_token_data
@@ -130,7 +130,7 @@ typedef struct s_token_data
 	char	*name; //var_name
 	char	*value;
 	t_token	token; //type
-}			t_token_data; //t_token
+} t_token_data; //t_token
 
 /**
  * @name: enum t_pars_state
@@ -165,8 +165,7 @@ typedef enum e_pars_state
 	P_APPEND, //PARS_REDIR_OUT_APPEND
 	P_HEREDOC, //PARS_REDIR_IN_HEREDOC
 	P_INVALID //PARS_INVALID
-}	t_pars_state; //t_pars_st
-
+} t_pars_state; //t_pars_st
 /**
  * @name: enum t_error
  * @description: Enumerates the types of error that will occur while parsing the command. All the parser states return a t_error value.
@@ -182,13 +181,13 @@ typedef enum e_pars_state
  * 		@value: NO_ERROR
  * 		@description: No error occurred
 */
-typedef enum e_error
+typedef enum	e_error
 {
 	SYNTAX, //PARS_SYNTAX_ERROR
 	MALLOC, // PARS_MALLOC_ERROR
 	NOT_FOUND, //PARS_NO_SUCH_FILE_OR_DIR
 	NO_ERROR //PARS_NO_ERROR
-}	t_error; //t_pars_err
+} t_error; //t_pars_err
 
 /**
  * @name: struct t_command
@@ -205,13 +204,13 @@ typedef enum e_error
  * 		@var: out_fileno
  * 		@description: Output file descriptor number
 */
-typedef struct	s_command
+typedef struct s_command
 {
-    int		ac; //argc
-	char	**args; //argv
-	int		in_fileno; //fd_in
-	int		out_fileno; //fd_out
-}			t_command;
+	int ac;
+	char **args;
+	int in_fileno;
+	int out_fileno;
+} t_command;
 
 /**
  * @name: struct t_data
@@ -237,24 +236,25 @@ typedef struct	s_command
 typedef struct s_data
 {
 	char		**env;
-	t_list		*command_list; //commands
+	t_list		*command_list;
 	char		**export_env;
 	int			stdin_dup;
 	int			stdout_dup;
 }	t_data;
 
-/* ==================================================== FUNCTIONS ==================================================== */
+/* ================================ FUNCTIONS ================================ */
 
-/* ========================================== SIGNALS ========================================== */
+/* ================== SIGNALS ================== */
 
 void	set_interactive_signals(void);
 void	set_non_interactive_signals(void);
 
-/* ========================================== ENV_UTILS ========================================== */
+/* ================== ENV_UTILS ================== */
 
-char	**copy_env(char** env);
+char	**copy_env(char	**env);
 size_t	calc_env_size(char **env);
 void	free_env_copy(char **env, int last_index);
+void	free_environments(t_data *data);
 char	*get_env_value(t_data *data, char *key);
 int		get_env_index(char **env, char *var);
 int		add_to_env(char **env, char *key, char *value);
@@ -262,7 +262,7 @@ int		delete_line_env(char **env, int pos);
 char	**split_env(char *str);
 void	free_split(char **args);
 
-/* ========================================== LEXER ========================================== */
+/* ================== LEXER ================== */
 
 t_list	*lexer_analysis(char *input);
 void	transist(t_lex_state *current_state, char ch_read);
@@ -270,17 +270,17 @@ void	apppend_lexer_token(t_list **tokens, char *cmd);
 void	free_lexer_token_data(void *token);
 t_list	*new_lexer_token(t_token token_type, char *value);
 
-/* ========================================== PARSER ========================================== */
+/* ================== PARSER ================== */
 
-t_list  *parser_analysis(t_list *tokens_list, t_data *data);
+t_list	*parser_analysis(t_list *tokens_list, t_data *data);
 
-/* ========================================== BUILTINS ========================================== */
-int	echo_builtin(char **args);
-int	cd_builtin(t_command *cmd, t_data *data);
-int	env_builtin(t_command *cmd, t_data *data);
-int	exit_builtin(t_command *cmd, t_data *data);
-int	export_builtin(t_command *cmd, t_data *data);
-int	pwd_builtin(void);
-int	unset_builtin(t_command *cmd, t_data *data);
+/* ================== BUILTINS ================== */
+int		echo_builtin(char **args);
+int		cd_builtin(t_command *cmd, t_data *data);
+int		env_builtin(t_command *cmd, t_data *data);
+int		exit_builtin(t_command *cmd, t_data *data);
+int		export_builtin(t_command *cmd, t_data *data);
+int		pwd_builtin(void);
+int		unset_builtin(t_command *cmd, t_data *data);
 
 #endif

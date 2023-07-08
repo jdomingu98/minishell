@@ -1,4 +1,3 @@
-
 #include "minishell.h"
 
 int	env_builtin(t_command *cmd, t_data *data)
@@ -15,4 +14,3 @@ int	env_builtin(t_command *cmd, t_data *data)
 	}
 	return (0);
 }
-

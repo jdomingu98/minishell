@@ -1,4 +1,3 @@
-
 #include "minishell.h"
 
 static int	unset_env_vars(t_command *cmd, t_data *data)
@@ -13,7 +12,7 @@ static int	unset_env_vars(t_command *cmd, t_data *data)
 	while (i < cmd->ac)
 	{
 		i_env = get_env_index(data->env, args[i]);
-		i_exp = get_env_index(data->exportenv, args[i]);
+		i_exp = get_env_index(data->export_env, args[i]);
 		if (i_env == -1 || i_exp == -1)
 			return (print_error("unset", args[i], "var does not exist", 1));
 		if (i_env != -1)
@@ -30,7 +29,7 @@ int	unset_builtin(t_command *cmd, t_data *data)
 	int	code_number;
 
 	code_number = 0;
-	if (cmd->argc > 1)
-		code_number = unset_vars(cmnd, data);
+	if (cmd->ac > 1)
+		code_number = unset_vars(cmd, data);
 	return (code_number);
 }

@@ -24,7 +24,8 @@ static void	string_state_lexer(char **cmd, t_lex_state *state, t_list **tokens)
 	(*cmd)++;
 }
 
-static void	quotes_state_lexer(char **cmd, t_lex_state *state, t_list **tokens, char qtype)
+static void	quotes_state_lexer(char **cmd, t_lex_state *state,
+	t_list **tokens, char qtype)
 {
 	transist(state, **cmd);
 	if (qtype == '"' && !ft_strchr("\"", **cmd))
@@ -36,7 +37,7 @@ static void	quotes_state_lexer(char **cmd, t_lex_state *state, t_list **tokens, 
 
 static void	initial_state_lexer(char **cmd, t_lex_state *state, t_list **tokens)
 {
-	transist(state, **cmd); //
+	transist(state, **cmd);
 	if (ft_strchr("'\"", **cmd))
 		ft_lstadd_back(tokens, new_lexer_token(T_STRING, ft_strdup("")));
 	else if (**cmd == '|')
@@ -50,17 +51,18 @@ static void	initial_state_lexer(char **cmd, t_lex_state *state, t_list **tokens)
 	else if (**cmd == '<')
 		ft_lstadd_back(tokens, new_lexer_token(T_REDIR_IN, NULL));
 	else if (**cmd != ' ')
-		ft_lstadd_back(tokens, new_lexer_token(T_STRING, ft_substr(*cmd, 0, 1)));
-	if ((**cmd == '>' && *((*cmd) + 1) == '>') || (**cmd == '<'
-			&& *((*cmd) + 1) == '<'))
+		ft_lstadd_back(tokens,
+			new_lexer_token(T_STRING, ft_substr(*cmd, 0, 1)));
+	if ((**cmd == '>' && *((*cmd) + 1) == '>')
+		|| (**cmd == '<' && *((*cmd) + 1) == '<'))
 		(*cmd)++;
 	(*cmd)++;
 }
 
 t_list	*lexer_analysis(char *input)
 {
-    t_lex_state	current_state;
-    t_list		*token_list;
+	t_lex_state	current_state;
+	t_list		*token_list;
 
 	current_state = L_INIT;
 	token_list = NULL;
@@ -78,7 +80,7 @@ t_list	*lexer_analysis(char *input)
 	if (current_state == L_QUOTE || current_state == L_DQUOTE)
 	{
 		print_error("lexer", "syntax error", "quote not closed", 0);
-		return(free_lexer_token_data(&token_list), NULL);
+		return (free_lexer_token_data(&token_list), NULL);
 	}
 	return (token_list);
 }

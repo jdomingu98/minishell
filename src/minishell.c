@@ -15,9 +15,9 @@ static t_list	*get_command_list(char *input_line, t_data *data)
 	if (!input_line)
 	{
 		ft_putendl_fd("exit", STDOUT_FILENO);
-		// exit_shell(data, status.status_code);
+		close_shell(data, g_status.status_code);
 	}
-	//expand_variables(&input, data, 0); //
+	expand_variables(&input_line, data, false);
 	tokens_list = lexer_analysis(input_line);
 	if (!tokens_list)
 		return (NULL);
@@ -33,7 +33,7 @@ static t_list	*get_command_list(char *input_line, t_data *data)
 */
 static t_data	*init_data(char **env)
 {
-	t_data *data;
+	t_data	*data;
 
 	data = ft_calloc(1, sizeof(t_data));
 	if (!data)
@@ -75,13 +75,13 @@ int	main(int argc, char **argv, char **envp)
 		set_non_interactive_signals();
 		data->command_list = get_command_list(input, data);
 		free(input);
-		if(!data->command_list)
+		if (!data->command_list)
 			continue ;
 		if (ft_lstsize(data->command_list) == 1)
-			status.status_code = execute_input(data); //
+			g_status.status_code = execute_input(data); //
 		else if (ft_lstsize(data->command_list) > 1)
-			status.status_code = execute_with_pipe(data); //
-		//pars_free_command_list(&(data->command_list)); //
+			g_status.status_code = execute_with_pipe(data); //
+		free_command_list(&(data->command_list));
 	}
 	return (EXIT_SUCCESS);
 }

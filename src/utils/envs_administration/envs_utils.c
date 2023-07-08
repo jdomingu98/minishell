@@ -1,5 +1,13 @@
 #include "minishell.h"
 
+void	free_environments(t_data *data)
+{
+	free_env_copy(data->env, calc_env_size(data->env));
+	free_env_copy(data->export_env, calc_env_size(data->export_env));
+	free(data->env);
+	free(data->export_env);
+}
+
 /**
  * @description: frees the env copy variable until last_index index 
  * @param env: The environment copy.
@@ -35,7 +43,7 @@ size_t	calc_env_size(char **env)
  * @param env: The original environment variable.
  * @return: A copy of the env passed by parameter
 */
-char	**copy_env(char** env)
+char	**copy_env(char **env)
 {
 	int		i;
 	char	**env_copy;
@@ -44,12 +52,12 @@ char	**copy_env(char** env)
 	env_copy = ft_calloc(calc_env_size(env) + 1, sizeof(char *));
 	if (!env_copy)
 		return (NULL);
-	while(env[i])
+	while (env[i])
 	{
 		env_copy[i] = ft_strdup(env[i]);
-		if(!(env_copy[i]))
-			return(free_env_copy(env_copy, i), NULL);
+		if (!(env_copy[i]))
+			return (free_env_copy(env_copy, i), NULL);
 		i++;
 	}
-	return(env_copy);
+	return (env_copy);
 }

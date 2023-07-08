@@ -1,4 +1,3 @@
-
 #include "minishell.h"
 
 static void	update_working_dir(t_data *data, char *new_path)

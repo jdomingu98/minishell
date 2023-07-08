@@ -1,4 +1,3 @@
-
 #include "minishell.h"
 
 int	pwd_builtin(void)
@@ -8,10 +7,10 @@ int	pwd_builtin(void)
 
 	code_number = 0;
 	cwd = getcwd(NULL, 0);
-	if(!cwd)
+	if (!cwd)
 	{
 		code_number = 1;
-		return(code_number);
+		return (code_number);
 	}
 	ft_putendl_fd(cwd, STDOUT_FILENO);
 	free(cwd);

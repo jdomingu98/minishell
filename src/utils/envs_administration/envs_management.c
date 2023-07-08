@@ -2,7 +2,7 @@
 
 char	*get_env_value(t_data *data, char *key)
 {
-	char    **args;
+	char	**args;
 	char	*res;
 	size_t	key_len;
 	int		i;
@@ -21,7 +21,7 @@ char	*get_env_value(t_data *data, char *key)
 			return (res);
 		}
 		else
-			free_split(arg);
+			free_split(args);
 		i++;
 	}
 	return (NULL);
@@ -39,12 +39,12 @@ int	get_env_index(char **env, char *var)
 	while (env[i])
 	{
 		if (ft_strncmp(tmp, env[i], ft_strlen(tmp)) == 0)
-            break ;
+			break ;
 		i++;
 	}
 	free(tmp);
-    if (env[i])
-        return (i);
+	if (env[i])
+		return (i);
 	return (-1);
 }
 
@@ -99,7 +99,7 @@ int	delete_line_env(char **env, int pos)
 {
 	int	i;
 
-	if (pos > calc_env_size(data->env))
+	if (pos > calc_env_size(env))
 		return (0);
 	if (env[pos])
 		free(env[pos]);

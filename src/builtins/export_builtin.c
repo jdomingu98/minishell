@@ -1,4 +1,3 @@
-
 #include "minishell.h"
 
 static bool	check_valid_key(char *arg)
@@ -23,7 +22,7 @@ static bool	check_valid_key(char *arg)
 	return (valid);
 }
 
-static int	add_vars_to_envs(t_data *data,  t_command *cmd)
+static int	add_vars_to_envs(t_data *data, t_command *cmd)
 {
 	int		i;
 	char	**args;
@@ -57,7 +56,6 @@ int	export_builtin(t_command *cmd, t_data *data)
 	char	**export_line;
 	int		code_number;
 	int		i;
-	
 
 	code_number = 0;
 	if (cmd->ac == 1)
