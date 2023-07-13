@@ -14,25 +14,25 @@ static void	iterate_to_close(t_list *current, t_list *next, t_list *commands)
 	{
 		command = (t_command *) commands->content;
 		if (commands == current)
-			close_fd(command->fd_in);
+			close_fd(command->in_fileno);
 		else if (next && commands == next)
-			close_fd(command->fd_out);
+			close_fd(command->out_fileno);
 		else
 		{
-			close_fd(command->fd_in);
-			close_fd(command->fd_out);
+			close_fd(command->in_fileno);
+			close_fd(command->out_fileno);
 		}
 		commands = commands->next;
 	}
 }
 
-void	close_pipes(t_shell_data *data, t_list *instr)
+void	close_pipes(t_data *data, t_list *instr)
 {
 	t_list	*current;
 	t_list	*next;
 	t_list	*commands;
 
-	commands = data->commands;
+	commands = data->command_list;
 	next = 0;
 	current = 0;
 	if (instr)

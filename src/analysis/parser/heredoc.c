@@ -36,7 +36,7 @@ t_error	create_heredoc(t_list *cmd_list, char *token_value, t_data *data)
 	free(tmp);
 	if (!fname)
 		return (MALLOC);
-	read_heredoc(open(filename, O_WRONLY | O_CREAT | O_TRUNC, 0666),
+	read_heredoc(open(fname, O_WRONLY | O_CREAT | O_TRUNC, 0666),
 		token_value, data);
 	cmd->in_fileno = open(fname, O_RDONLY, 0666);
 	free(fname);

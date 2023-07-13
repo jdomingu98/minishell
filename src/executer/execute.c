@@ -22,7 +22,7 @@ static char	*validate_entry(char *cmd, char **path)
 	return (0);
 }
 
-static int	executer_aux(t_command *in_str, t__data *data)
+static int	executer_aux(t_command *in_str, t_data *data)
 {
 	char	**path;
 	char	*cmd_and_path;
@@ -45,22 +45,22 @@ static int	execute_common(t_command *in_str, t_data *data)
 	int		code_number;
 
 	code_number = 0;
-	g_sig.pid = fork();
-	if (g_sig.pid < 0)
-		return (g_sig.pid);
-	if (g_sig.pid == 0)
+	g_status.process_id = fork();
+	if (g_status.process_id < 0)
+		return (g_status.process_id);
+	if (g_status.process_id == 0)
 	{
 		code_number = executer_aux(in_str, data);
 		exit(code_number);
 	}
-	waitpid(g_sig.pid, &code_number, 0);
+	waitpid(g_status.process_id, &code_number, 0);
 	code_number = decode_exit_code(code_number);
 	if (code_number == 127)
 		print_error(in_str->args[0], 0, "command not found", code_number);
 	return (code_number);
 }
 
-int	execute(t_list *in_str, t_data *data)
+int	execute_input(t_list *in_str, t_data *data)
 {
 	int			status;
 	t_command	*cmd;
@@ -82,13 +82,13 @@ int	execute(t_list *in_str, t_data *data)
 	if (in_str->next)
 		close(((t_command *)in_str->next->content)->in_fileno);
 	if (cmd->in_fileno > 0)
-		dup2(data->dup_stdin, STDIN_FILENO);
+		dup2(data->stdin_dup, STDIN_FILENO);
 	if (cmd->out_fileno > 0)
-		dup2(data->dup_stdout, STDOUT_FILENO);
+		dup2(data->stdout_dup, STDOUT_FILENO);
 	return (status);
 }
 
-int	execute_pipex(t_data *data)
+int	execute_with_pipe(t_data *data)
 {
 	int		status;
 	int		ultimate_status;
@@ -102,11 +102,11 @@ int	execute_pipex(t_data *data)
 		if (ultimate_pid < 0)
 			return (ultimate_pid);
 		if (ultimate_pid == 0)
-			exit(execute(cmds, data));
+			exit(execute_input(cmds, data));
 		cmds = cmds->next;
 	}
 	close_pipes(data, 0);
-	cmds = data->commands;
+	cmds = data->command_list;
 	while (cmds)
 	{
 		if (ultimate_pid == waitpid(-1, &status, 0))

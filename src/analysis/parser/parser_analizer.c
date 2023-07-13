@@ -49,7 +49,7 @@ t_error	error_states(t_list *tokens, t_pars_state *current,
 	return (error);
 }
 
-void	transist_parser(t_pars_state *current_state, t_token *token)
+void	transist_parser(t_pars_state *current_state, t_token token)
 {
 	if (*current_state == P_COMMAND && token == T_PIPE)
 		*current_state = P_INIT;
@@ -58,15 +58,20 @@ void	transist_parser(t_pars_state *current_state, t_token *token)
 				|| *current_state == P_REDIR_OUT || *current_state == P_APPEND)
 			&& token != T_STRING))
 		*current_state = P_INVALID;
-	else if ((*current_state != P_COMMAND && *current_state != P_INVALID) && token == T_STRING)
+	else if ((*current_state != P_COMMAND && *current_state != P_INVALID)
+		&& token == T_STRING)
 		*current_state = P_COMMAND;
-	else if ((*current_state == P_INIT || *current_state == P_COMMAND) && token == T_REDIR_IN)
+	else if ((*current_state == P_INIT || *current_state == P_COMMAND)
+		&& token == T_REDIR_IN)
 		*current_state = P_REDIR_IN;
-	else if ((*current_state == P_INIT || *current_state == P_COMMAND) && token  == T_HEREDOC)
+	else if ((*current_state == P_INIT || *current_state == P_COMMAND)
+		&& token == T_HEREDOC)
 		*current_state = P_HEREDOC;
-	else if ((*current_state == P_INIT || *current_state == P_COMMAND) && token  == T_REDIR_OUT)
+	else if ((*current_state == P_INIT || *current_state == P_COMMAND)
+		&& token == T_REDIR_OUT)
 		*current_state = P_REDIR_OUT;
-	else if ((*current_state == P_INIT || *current_state == P_COMMAND) && token == T_APPEND)
+	else if ((*current_state == P_INIT || *current_state == P_COMMAND)
+		&& token == T_APPEND)
 		*current_state = P_APPEND;
 }
 

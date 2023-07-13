@@ -17,7 +17,7 @@ int	execute_builtins(t_command *cmd, t_data *data)
 
 	status = 0;
 	if (ft_strncmp(cmd->args[0], "echo", 5) == 0)
-		status = echo_builtin(cmd);
+		status = echo_builtin(cmd->args);
 	else if (ft_strncmp(cmd->args[0], "env", 4) == 0)
 		status = env_builtin(cmd, data);
 	else if (ft_strncmp(cmd->args[0], "exit", 5) == 0)
@@ -31,7 +31,7 @@ int	execute_builtins(t_command *cmd, t_data *data)
 	return (status);
 }
 
-int	is_builtin(char *cmd)
+bool	is_builtin(char *cmd)
 {
 	return (ft_strncmp(cmd, "echo", 5) == 0
 		|| ft_strncmp(cmd, "env", 4) == 0

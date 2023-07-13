@@ -30,7 +30,7 @@ static int	add_vars_to_envs(t_data *data, t_command *cmd)
 
 	i = 0;
 	args = cmd->args;
-	while (++i < cmd->args)
+	while (++i < cmd->ac)
 	{
 		if (check_valid_key(args[i]))
 		{

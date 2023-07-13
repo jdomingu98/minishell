@@ -2,21 +2,21 @@
 
 void	transist(t_lex_state *current_state, char ch_read)
 {
-	if ((current_state == L_QUOTE && ch_read == '\'')
-		|| (current_state == L_DQUOTE && ch_read == '"')
-		|| (current_state == L_INIT && !ft_strchr("<' |\">", ch_read)))
+	if ((*current_state == L_QUOTE && ch_read == '\'')
+		|| (*current_state == L_DQUOTE && ch_read == '"')
+		|| (*current_state == L_INIT && !ft_strchr("<' |\">", ch_read)))
 		*current_state = L_STRING;
-	else if ((current_state == L_INIT && ch_read == '\'')
-		|| (current_state == L_STRING && ch_read == '\''))
+	else if ((*current_state == L_INIT && ch_read == '\'')
+		|| (*current_state == L_STRING && ch_read == '\''))
 		*current_state = L_QUOTE;
-	else if ((current_state == L_INIT && ch_read == '"')
-		|| (current_state == L_STRING && ch_read == '"'))
+	else if ((*current_state == L_INIT && ch_read == '"')
+		|| (*current_state == L_STRING && ch_read == '"'))
 		*current_state = L_DQUOTE;
-	else if ((current_state == L_STRING && ft_strchr("< |>", ch_read)))
+	else if ((*current_state == L_STRING && ft_strchr("< |>", ch_read)))
 		*current_state = L_INIT;
 }
 
-void	apppend_lexer_token(t_list **tokens, char *cmd)
+void	append_lexer_token(t_list **tokens, char *cmd)
 {
 	t_token_data	*last_token;
 	char			*read;
@@ -47,7 +47,7 @@ void	free_lexer_token_data(void *token)
 
 	if (!token)
 		return ;
-	tmp = (t_token *) token;
+	tmp = (t_token_data *) token;
 	if (tmp->value)
 		free(tmp->value);
 	if (tmp->name)

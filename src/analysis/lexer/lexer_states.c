@@ -20,7 +20,7 @@ static void	string_state_lexer(char **cmd, t_lex_state *state, t_list **tokens)
 	else if (**cmd == '<')
 		ft_lstadd_back(tokens, new_lexer_token(T_REDIR_IN, NULL));
 	else if (!ft_strchr(" '\"", **cmd))
-		apppend_lexer_token(tokens, *cmd);
+		append_lexer_token(tokens, *cmd);
 	(*cmd)++;
 }
 

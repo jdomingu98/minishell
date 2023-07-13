@@ -1,12 +1,5 @@
 #include "minishell.h"
 
-/**
- * With the input read generates a list of token (the result of a lexer analysis).
- * With the list of tokens generates the data of the command list (the result of a parser analysis).
- * @param input_line: The input that had been read earlier
- * @param data: The data structure
- * @return The commads list to be executed
-*/
 static t_list	*get_command_list(char *input_line, t_data *data)
 {
 	t_list	*tokens_list;
@@ -26,11 +19,6 @@ static t_list	*get_command_list(char *input_line, t_data *data)
 	return (commands_list);
 }
 
-/**
- * Initialized the data structure and fill part of it with the env copies and with the duplicates of stdin and stdout.
- * @param env: The original env variable
- * @return The data structure stored in memory and with the env copies and with the stdin/stdout duplicates added.
-*/
 static t_data	*init_data(char **env)
 {
 	t_data	*data;
@@ -49,14 +37,6 @@ static t_data	*init_data(char **env)
 	return (data);
 }
 
-/**
- * The main function. Reads the command input, adds it to the history and call the functions to analyze and parse the command.
- * Then, the command list is executed.
- * @param argc: Argument counter
- * @param argv: List of arguments
- * @param envp: Environment path
- * @return Zero if all gone fine, other result if something gone wrong
-*/
 int	main(int argc, char **argv, char **envp)
 {
 	t_data	*data;
@@ -78,9 +58,9 @@ int	main(int argc, char **argv, char **envp)
 		if (!data->command_list)
 			continue ;
 		if (ft_lstsize(data->command_list) == 1)
-			g_status.status_code = execute_input(data); //
+			g_status.status_code = execute_input(data->command_list, data);
 		else if (ft_lstsize(data->command_list) > 1)
-			g_status.status_code = execute_with_pipe(data); //
+			g_status.status_code = execute_with_pipe(data);
 		free_command_list(&(data->command_list));
 	}
 	return (EXIT_SUCCESS);

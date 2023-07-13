@@ -18,8 +18,8 @@ static char	**process_path(char *arg)
 {
 	char	*aux;
 	char	**result;
-	int	i;
-	
+	int		i;
+
 	i = 0;
 	result = ft_split(arg, ':');
 	if (!result)
@@ -44,7 +44,7 @@ char	**get_path(char **env)
 	{
 		args = ft_split(*env, '=');
 		if (!args || !args[0] || !args[1])
-			return (free_split(args));
+			return (free_split(args), NULL);
 		if (ft_strncmp(args[0], "PATH", 4) == 0)
 		{
 			result = process_path(args[1]);

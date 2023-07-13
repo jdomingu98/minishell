@@ -63,10 +63,10 @@ int	exit_builtin(t_command *cmd, t_data *data)
 				print_error("exit", 0, "numeric argument required", 255));
 		return (print_error("exit", 0, "too many arguments", 1));
 	}
-	if (!check_if_number(cmd->args[1]) && cmd->args > 1)
+	if (!check_if_number(cmd->args[1]) && cmd->ac > 1)
 		close_shell(data,
 			print_error("exit", 0, "numeric argument required", 255));
-	else if (cmd->args == 1)
+	else if (cmd->ac == 1)
 		close_shell(data, 0);
 	else
 		close_shell(data, ft_atoi(cmd->args[1]) % 256);

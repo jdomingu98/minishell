@@ -37,7 +37,8 @@ t_error	redir_in_state(t_list *tokens, t_pars_state *state, t_list **commands)
 	return (NO_ERROR);
 }
 
-t_error	redir_out_append_state(t_list *tokens, t_pars_state *state, t_list **cmds, bool is_append)
+t_error	redir_out_append_state(t_list *tokens, t_pars_state *state,
+	t_list **cmds, bool is_append)
 {
 	t_token_data	*token_data;
 
@@ -50,7 +51,8 @@ t_error	redir_out_append_state(t_list *tokens, t_pars_state *state, t_list **cmd
 	return (NO_ERROR);
 }
 
-t_error	heredoc_state(t_list *tokens, t_pars_state *state, t_list **cmds, t_data *data)
+t_error	heredoc_state(t_list *tokens, t_pars_state *state,
+	t_list **cmds, t_data *data)
 {
 	t_token_data	*token_data;
 

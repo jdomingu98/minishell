@@ -10,7 +10,7 @@ char	*join_strs(char *str, char *add)
 		return (ft_strdup(add));
 	tmp = str;
 	str = ft_strjoin(tmp, add);
-	free_ptr(tmp);
+	free(tmp);
 	return (str);
 }
 
@@ -43,6 +43,7 @@ int	print_error(char *command, char *detail, char *error_message, int err)
 	}
 	msg = join_strs(msg, error_message);
 	ft_putendl_fd(msg, STDERR_FILENO);
-	free_ptr(msg);
+	if (msg)
+		free(msg);
 	return (err);
 }
