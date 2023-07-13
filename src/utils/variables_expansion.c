@@ -26,17 +26,15 @@ static void	concat_me(char **line, int count, char *var_value, int var_name_len)
 	char	*aux;
 	char	*str1;
 	char	*str2;
-	char	*result;
 
 	str1 = ft_substr(*line, 0, count);
-	str2 = ft_substr(*line, count + var_name_len + 1, -1);
 	aux = ft_strjoin(str1, var_value);
-	result = ft_strjoin(aux, str2);
 	free(str1);
-	free(str2);
-	free(aux);
+	str2 = ft_substr(*line, count + var_name_len + 1, -1);
 	free(*line);
-	*line = result;
+	*line = ft_strjoin(aux, str2);
+	free(aux);
+	free(str2);
 }
 
 void	expand_variables(char **line, t_data *data, bool expand_quotes)
@@ -44,10 +42,10 @@ void	expand_variables(char **line, t_data *data, bool expand_quotes)
 	int		var_name_len;
 	int		line_count;
 	char	*var_value;
-	int		quote_found;
+	bool	quote_found;
 
 	line_count = 0;
-	quote_found = 0;
+	quote_found = false;
 	while (*(*line + line_count))
 	{
 		if (*(*line + line_count) == '\'')
