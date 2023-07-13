@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   unset_builtin.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: atrujill <atrujill@student.42malaga.com>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/07/14 01:28:29 by atrujill          #+#    #+#             */
+/*   Updated: 2023/07/14 01:28:31 by atrujill         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 static int	unset_env_vars(t_command *cmd, t_data *data)
@@ -16,9 +28,9 @@ static int	unset_env_vars(t_command *cmd, t_data *data)
 		if (i_env == -1 || i_exp == -1)
 			return (print_error("unset", args[i], "var does not exist", 1));
 		if (i_env != -1)
-			delete_env_var(data, i_env);
+			delete_line_env(data->env, i_env);
 		if (i_exp != -1)
-			delete_export_var(data, i_exp);
+			delete_line_env(data->export_env, i_exp);
 		i++;
 	}
 	return (0);
@@ -30,6 +42,6 @@ int	unset_builtin(t_command *cmd, t_data *data)
 
 	code_number = 0;
 	if (cmd->ac > 1)
-		code_number = unset_vars(cmd, data);
+		code_number = unset_env_vars(cmd, data);
 	return (code_number);
 }

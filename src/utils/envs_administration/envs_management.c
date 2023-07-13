@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   envs_management.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: jdomingu <jdomingu@student.42malaga.com>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/07/14 01:24:47 by jdomingu          #+#    #+#             */
+/*   Updated: 2023/07/14 01:24:48 by jdomingu         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 char	*get_env_value(t_data *data, char *key)
@@ -59,7 +71,7 @@ static char	**realloc_env(char ***env, int size)
 	i = 0;
 	while (env[i] && i < size)
 	{
-		new_env[i] = ft_strdup(env[i]);
+		new_env[i] = ft_strdup((*env)[i]);
 		free(env[i]);
 		i++;
 	}
@@ -86,7 +98,7 @@ int	add_to_env(char **env, char *key, char *value)
 	else
 	{
 		idx = calc_env_size(env);
-		env = realloc_env(env, idx + 1);
+		env = realloc_env(&env, idx + 1);
 		if (!env)
 			return (12);
 		env[idx] = ft_strjoin(key, eq_value);
@@ -99,7 +111,7 @@ int	delete_line_env(char **env, int pos)
 {
 	int	i;
 
-	if (pos > calc_env_size(env))
+	if ((size_t) pos > calc_env_size(env))
 		return (0);
 	if (env[pos])
 		free(env[pos]);
@@ -110,7 +122,7 @@ int	delete_line_env(char **env, int pos)
 		free(env[i + 1]);
 		i++;
 	}
-	env = realloc_env(env, i);
+	env = realloc_env(&env, i);
 	if (!env)
 		return (0);
 	return (1);

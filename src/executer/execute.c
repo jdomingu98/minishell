@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   execute.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: atrujill <atrujill@student.42malaga.com>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/07/14 01:27:15 by atrujill          #+#    #+#             */
+/*   Updated: 2023/07/14 01:31:07 by atrujill         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include"minishell.h"
 
@@ -60,27 +71,29 @@ static int	execute_common(t_command *in_str, t_data *data)
 	return (code_number);
 }
 
-int	execute_input(t_list *in_str, t_data *data)
+int	execute_input(t_data *data)
 {
 	int			status;
 	t_command	*cmd;
+	t_list	*cmds;
 
-	cmd = (t_command *) in_str->content;
+	cmds = data->command_list;
+	cmd = (t_command *) cmds->content;
 	if (!cmd->args || !cmd->args[0])
 		return (0);
 	if (cmd->in_fileno > 0)
 		dup2(cmd->in_fileno, STDIN_FILENO);
 	if (cmd->out_fileno > 0)
 		dup2(cmd->out_fileno, STDOUT_FILENO);
-	close_pipes(data, in_str);
+	close_pipes(data, cmds);
 	if (is_builtin(cmd->args[0]))
 		status = execute_builtins(cmd, data);
 	else
 		status = execute_common(cmd, data);
 	if (cmd->out_fileno > 0)
 		close(cmd->out_fileno);
-	if (in_str->next)
-		close(((t_command *)in_str->next->content)->in_fileno);
+	if (cmds->next)
+		close(((t_command *) cmds->next->content)->in_fileno);
 	if (cmd->in_fileno > 0)
 		dup2(data->stdin_dup, STDIN_FILENO);
 	if (cmd->out_fileno > 0)
@@ -102,7 +115,7 @@ int	execute_with_pipe(t_data *data)
 		if (ultimate_pid < 0)
 			return (ultimate_pid);
 		if (ultimate_pid == 0)
-			exit(execute_input(cmds, data));
+			exit(execute_input(data));
 		cmds = cmds->next;
 	}
 	close_pipes(data, 0);

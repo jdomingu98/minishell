@@ -6,7 +6,7 @@
 /*   By: jdomingu <jdomingu@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/13 17:36:54 by jdomingu          #+#    #+#             */
-/*   Updated: 2023/07/13 17:36:54 by jdomingu         ###   ########.fr       */
+/*   Updated: 2023/07/14 01:18:23 by jdomingu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,7 +139,7 @@ t_error	create_heredoc(t_list *cmd_list, char *token_value, t_data *data);
 
 /* ================== EXECUTER ================== */
 
-int		execute_input(t_list *in_str, t_data *data);
+int		execute_input(t_data *data);
 int		execute_with_pipe(t_data *data);
 bool	is_builtin(char *cmd);
 int		execute_builtins(t_command *cmd, t_data *data);

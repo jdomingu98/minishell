@@ -1,11 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   echo_builtin.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: atrujill <atrujill@student.42malaga.com>   +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/07/14 01:27:43 by atrujill          #+#    #+#             */
+/*   Updated: 2023/07/14 01:27:45 by atrujill         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-/**
- * @param flag: the flag of echo
- * @return:
- * 		TRUE if the flag is "-n" (there can be more than one "n")
- * 		FALSE otherwise
-*/
 static bool	check_if_n_flag(char *flag)
 {
 	int		i;
@@ -18,13 +24,6 @@ static bool	check_if_n_flag(char *flag)
 	return (!flag[i]);
 }
 
-/**
- * @param args: 
- * @param n_flag:
- * @param i:
- * @description: Prints the string args[i]. A new line if "-n" flag is not set
- * @return: nothing
-*/
 static void	print_echo_string(char **args, int nflag, int i)
 {
 	if (!args[i] && !nflag)
@@ -42,14 +41,6 @@ static void	print_echo_string(char **args, int nflag, int i)
 		i++;
 	}
 }
-
-/**
- * Executes the echo builtin command: prints the given strings
- * and adds a \n character or not depending on the -n option.
- * Returns 1 on completion.
- * @param args: Contains the echo command ¿?
- * @return: 1 ¿?
-*/
 
 int	echo_builtin(char **args)
 {

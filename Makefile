@@ -15,7 +15,7 @@ PARSER_DIR = $(ANALYSIS_DIR)/parser/
 EXECUTER_DIR = $(SRC_DIR)executer/
 BUILTINS_DIR = $(EXECUTER_DIR)builtins/
 UTILS_DIR = $(SRC_DIR)utils/
-ENV_ADMIN = $(UTILS_DIR)env_administration/
+ENV_ADMIN_DIR = src/utils/envs_administration/
 # =================================================================================
 
 LEXER_FILES = lexer_states.c token_actions.c
@@ -25,11 +25,11 @@ PARSER_FILES = parser_analizer.c parser_states.c free_command_list.c heredoc.c\
 				parser_actions.c
 PARSER_SRCS = $(addprefix $(PARSER_DIR), $(PARSER_FILES))
 
-ENV_ADMIN_FILES = envs_management.c envs_split.c envs_uitls.c parse_env.c
-ENV_ADMIN_SRCS = $(addprefix $(ENV_ADMIN), $(ENV_ADMIN_FILES))
+ENV_ADMIN_FILES = envs_management.c envs_split.c envs_utils.c parse_env.c
+ENV_ADMIN_SRCS = $(addprefix $(ENV_ADMIN_DIR), $(ENV_ADMIN_FILES))
 
 UTILS_FILES = signals.c variables_expansion.c pipes.c print_errors.c
-UTILS_SRCS = $(addprefix $(UTILS_DIR), $(UTILS_FILES)) $(ENV_ADMIN_FILES)
+UTILS_SRCS = $(addprefix $(UTILS_DIR), $(UTILS_FILES)) $(ENV_ADMIN_SRCS)
 
 BUILTINS_FILES = cd_builtin.c echo_builtin.c env_builtin.c exit_builtin.c \
 					export_builtin.c pwd_builtin.c unset_builtin.c
