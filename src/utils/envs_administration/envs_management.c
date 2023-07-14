@@ -6,7 +6,7 @@
 /*   By: jdomingu <jdomingu@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 01:24:47 by jdomingu          #+#    #+#             */
-/*   Updated: 2023/07/14 01:24:48 by jdomingu         ###   ########.fr       */
+/*   Updated: 2023/07/14 09:28:23 by atrujill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,61 +69,61 @@ static char	**realloc_env(char ***env, int size)
 	if (!new_env)
 		return (NULL);
 	i = 0;
-	while (env[i] && i < size)
+	while ((*env)[i] && i < size)
 	{
 		new_env[i] = ft_strdup((*env)[i]);
-		free(env[i]);
+		free((*env)[i]);
 		i++;
 	}
-	free(env);
+	free(*env);
 	return (new_env);
 }
 
-int	add_to_env(char **env, char *key, char *value)
+int	add_to_env(char ***env, char *key, char *value)
 {
 	int		idx;
 	char	*eq_value;
 
-	idx = get_env_index(env, key);
+	idx = get_env_index(*env, key);
 	if (!value)
 		value = "";
 	eq_value = ft_strjoin("=", value);
 	if (!eq_value)
 		return (12);
-	if (idx != -1 && env[idx])
+	if (idx != -1 && (*env)[idx])
 	{
-		free(env[idx]);
-		env[idx] = ft_strjoin(key, eq_value);
+		free((*env)[idx]);
+		(*env)[idx] = ft_strjoin(key, eq_value);
 	}
 	else
 	{
-		idx = calc_env_size(env);
-		env = realloc_env(&env, idx + 1);
-		if (!env)
+		idx = calc_env_size(*env);
+		*env = realloc_env(env, idx + 1);
+		if (!(*env))
 			return (12);
-		env[idx] = ft_strjoin(key, eq_value);
+		(*env)[idx] = ft_strjoin(key, eq_value);
 	}
 	free(eq_value);
 	return (0);
 }
 
-int	delete_line_env(char **env, int pos)
+int	delete_line_env(char ***env, int pos)
 {
 	int	i;
 
-	if ((size_t) pos > calc_env_size(env))
+	if ((size_t) pos > calc_env_size(*env))
 		return (0);
-	if (env[pos])
-		free(env[pos]);
+	if ((*env)[pos])
+		free((*env)[pos]);
 	i = pos;
-	while (env[i + 1])
+	while ((*env)[i + 1])
 	{
-		env[i] = ft_strdup(env[i + 1]);
-		free(env[i + 1]);
+		(*env)[i] = ft_strdup((*env)[i + 1]);
+		free((*env)[i + 1]);
 		i++;
 	}
-	env = realloc_env(&env, i);
-	if (!env)
+	*env = realloc_env(env, i);
+	if (!(*env))
 		return (0);
 	return (1);
 }

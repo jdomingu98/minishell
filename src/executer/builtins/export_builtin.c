@@ -6,7 +6,7 @@
 /*   By: atrujill <atrujill@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 01:28:14 by atrujill          #+#    #+#             */
-/*   Updated: 2023/07/14 01:28:16 by atrujill         ###   ########.fr       */
+/*   Updated: 2023/07/14 09:18:57 by atrujill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,12 @@ static int	add_vars_to_envs(t_data *data, t_command *cmd)
 		if (check_valid_key(args[i]))
 		{
 			if (!ft_strchr(args[i], '='))
-				add_to_env(data->export_env, args[i], "");
+				add_to_env(&(data->export_env), args[i], "");
 			else
 			{
 				export_line = split_env(args[i]);
-				add_to_env(data->env, export_line[0], export_line[1]);
-				add_to_env(data->export_env, export_line[0], export_line[1]);
+				add_to_env(&(data->env), export_line[0], export_line[1]);
+				add_to_env(&(data->export_env), export_line[0], export_line[1]);
 				free_split(export_line);
 			}
 		}

@@ -28,9 +28,9 @@ static int	unset_env_vars(t_command *cmd, t_data *data)
 		if (i_env == -1 || i_exp == -1)
 			return (print_error("unset", args[i], "var does not exist", 1));
 		if (i_env != -1)
-			delete_line_env(data->env, i_env);
+			delete_line_env(&(data->env), i_env);
 		if (i_exp != -1)
-			delete_line_env(data->export_env, i_exp);
+			delete_line_env(&(data->export_env), i_exp);
 		i++;
 	}
 	return (0);

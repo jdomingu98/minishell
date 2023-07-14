@@ -24,36 +24,32 @@ static bool	check_if_n_flag(char *flag)
 	return (!flag[i]);
 }
 
-static void	print_echo_string(char **args, int nflag, int i)
+static void	print_echo_string(char **args, int idx)
 {
-	if (!args[i] && !nflag)
+	while (args[idx])
 	{
-		ft_putchar_fd('\n', STDOUT_FILENO);
-		return ;
-	}
-	while (args[i])
-	{
-		ft_putstr_fd(args[i], STDOUT_FILENO);
-		if (args[i + 1])
-			ft_putchar_fd(' ', STDOUT_FILENO);
-		else if (!args[i + 1] && !nflag)
-			ft_putchar_fd('\n', STDOUT_FILENO);
-		i++;
+		if (!check_if_n_flag(args[idx]))
+		{
+			ft_putstr_fd(args[idx], STDOUT_FILENO);
+			if (args[idx + 1])
+				ft_putchar_fd(' ', STDOUT_FILENO);
+		}
+		idx++;
 	}
 }
 
-int	echo_builtin(char **args)
+int	echo_builtin(t_command *cmd)
 {
-	int		i;
-	bool	flag;
-
-	flag = check_if_n_flag(args[1]);
-	i = 1;
-	while (args[i] && flag)
+	if (cmd->ac == 2 && check_if_n_flag(cmd->args[1]))
+		return (0);
+	if (cmd->ac == 1)
+		ft_putendl_fd("", STDOUT_FILENO);
+	else if (cmd->ac >= 2 && !check_if_n_flag(cmd->args[1]))
 	{
-		i++;
-		flag = check_if_n_flag(args[i]);
+		print_echo_string(cmd->args, 1);
+		ft_putendl_fd("", STDOUT_FILENO);
 	}
-	print_echo_string(args, flag, i);
-	return (1);
+	else
+		print_echo_string(cmd->args, 2);
+	return (0);
 }

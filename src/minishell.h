@@ -139,7 +139,7 @@ t_error	create_heredoc(t_list *cmd_list, char *token_value, t_data *data);
 
 /* ================== EXECUTER ================== */
 
-int		execute_input(t_data *data);
+int		execute_input(t_data *data, t_list *cmds);
 int		execute_with_pipe(t_data *data);
 bool	is_builtin(char *cmd);
 int		execute_builtins(t_command *cmd, t_data *data);
@@ -147,7 +147,7 @@ int		decode_exit_code(int num);
 
 /* ============== BUILTINS ============== */
 
-int		echo_builtin(char **args);
+int		echo_builtin(t_command *cmd);
 int		cd_builtin(t_command *cmd, t_data *data);
 int		env_builtin(t_command *cmd, t_data *data);
 int		exit_builtin(t_command *cmd, t_data *data);
@@ -174,8 +174,8 @@ void	free_env_copy(char **env, int last_index);
 void	free_environments(t_data *data);
 char	*get_env_value(t_data *data, char *key);
 int		get_env_index(char **env, char *var);
-int		add_to_env(char **env, char *key, char *value);
-int		delete_line_env(char **env, int pos);
+int		add_to_env(char ***env, char *key, char *value);
+int		delete_line_env(char ***env, int pos);
 char	**split_env(char *str);
 void	free_split(char **args);
 char	**get_path(char **env);

@@ -71,13 +71,11 @@ static int	execute_common(t_command *in_str, t_data *data)
 	return (code_number);
 }
 
-int	execute_input(t_data *data)
+int	execute_input(t_data *data, t_list *cmds)
 {
 	int			status;
 	t_command	*cmd;
-	t_list	*cmds;
 
-	cmds = data->command_list;
 	cmd = (t_command *) cmds->content;
 	if (!cmd->args || !cmd->args[0])
 		return (0);
@@ -104,27 +102,27 @@ int	execute_input(t_data *data)
 int	execute_with_pipe(t_data *data)
 {
 	int		status;
-	int		ultimate_status;
-	int		ultimate_pid;
-	t_list	*cmds;
+	int		last_code;
+	int		last_pid;
+	t_list	*cmd_list;
 
-	cmds = data->command_list;
-	while (cmds)
+	cmd_list = data->command_list;
+	while (cmd_list)
 	{
-		ultimate_pid = fork();
-		if (ultimate_pid < 0)
-			return (ultimate_pid);
-		if (ultimate_pid == 0)
-			exit(execute_input(data));
-		cmds = cmds->next;
+		last_pid = fork();
+		if (last_pid < 0)
+			return (last_pid);
+		if (last_pid == 0)
+			exit(execute_input(data, cmd_list));
+		cmd_list = cmd_list->next;
 	}
 	close_pipes(data, 0);
-	cmds = data->command_list;
-	while (cmds)
+	cmd_list = data->command_list;
+	while (cmd_list)
 	{
-		if (ultimate_pid == waitpid(-1, &status, 0))
-			ultimate_status = decode_exit_code(status);
-		cmds = cmds->next;
+		if (last_pid == waitpid(-1, &status, 0))
+			last_code = decode_exit_code(status);
+		cmd_list = cmd_list->next;
 	}
-	return (ultimate_status);
+	return (last_code);
 }

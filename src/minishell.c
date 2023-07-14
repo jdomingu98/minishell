@@ -6,7 +6,7 @@
 /*   By: jdomingu <jdomingu@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 01:17:08 by jdomingu          #+#    #+#             */
-/*   Updated: 2023/07/14 01:31:59 by atrujill         ###   ########.fr       */
+/*   Updated: 2023/07/14 09:13:05 by atrujill         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ static t_list	*get_command_list(char *input_line, t_data *data)
 	}
 	expand_variables(&input_line, data, false);
 	tokens_list = lexer_analysis(input_line);
+	free(input_line);
 	if (!tokens_list)
 		return (NULL);
 	commands_list = parser_analysis(tokens_list, data);
@@ -68,11 +69,10 @@ int	main(int argc, char **argv, char **envp)
 		add_history(input);
 		set_non_interactive_signals();
 		data->command_list = get_command_list(input, data);
-		free(input);
 		if (!data->command_list)
 			continue ;
 		if (ft_lstsize(data->command_list) == 1)
-			g_status.status_code = execute_input(data);
+			g_status.status_code = execute_input(data, data->command_list);
 		else if (ft_lstsize(data->command_list) > 1)
 			g_status.status_code = execute_with_pipe(data);
 		free_command_list(&(data->command_list));

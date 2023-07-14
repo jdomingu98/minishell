@@ -28,7 +28,7 @@ int	execute_builtins(t_command *cmd, t_data *data)
 
 	status = 0;
 	if (ft_strncmp(cmd->args[0], "echo", 5) == 0)
-		status = echo_builtin(cmd->args);
+		status = echo_builtin(cmd);
 	else if (ft_strncmp(cmd->args[0], "env", 4) == 0)
 		status = env_builtin(cmd, data);
 	else if (ft_strncmp(cmd->args[0], "exit", 5) == 0)

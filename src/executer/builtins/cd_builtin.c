@@ -18,16 +18,16 @@ static void	update_working_dir(t_data *data, char *new_path)
 	char	*old_pwd;
 
 	current_pwd = get_env_value(data, "PWD");
-	add_to_env(data->env, "OLDPWD", current_pwd);
+	add_to_env(&(data->env), "OLDPWD", current_pwd);
 	free(current_pwd);
 	if (new_path[0] == '\0')
 	{
 		old_pwd = get_env_value(data, "OLDPWD");
-		add_to_env(data->env, "PWD", old_pwd);
+		add_to_env(&(data->env), "PWD", old_pwd);
 		free(old_pwd);
 	}
 	else
-		add_to_env(data->env, "PWD", new_path);
+		add_to_env(&(data->env), "PWD", new_path);
 }
 
 static int	exec_cd(char *aux_path, t_data *data)
@@ -65,7 +65,7 @@ int	cd_builtin(t_command *cmd, t_data *data)
 	else if (cmd->ac == 2 && ft_strncmp(cmd->args[1], ".", 2) == 0)
 	{
 		aux_path = get_env_value(data, "PWD");
-		code_number = add_to_env(data->env, "OLDPWD", aux_path);
+		code_number = add_to_env(&(data->env), "OLDPWD", aux_path);
 		free(aux_path);
 	}
 	else if (cmd->ac >= 2)

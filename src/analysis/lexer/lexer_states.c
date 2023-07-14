@@ -78,7 +78,7 @@ t_list	*lexer_analysis(char *input)
 
 	current_state = L_INIT;
 	token_list = NULL;
-	while (input)
+	while (*input)
 	{
 		if (current_state == L_INIT)
 			initial_state_lexer(&input, &current_state, &token_list);
