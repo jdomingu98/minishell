@@ -3,7 +3,7 @@ NAME	 = minishell
 LIBFT	 = libft
 # =================================================================================
 
-CFLAGS	 = -Wall -Wextra -Werror #-g -fsanitize=address
+CFLAGS	 = -Wall -Wextra -Werror -g -fsanitize=address
 HEADERS  = -I $(LIBFT) -I /Users/${USER}/.brew/opt/readline/include -I src
 LIBS 	 = $(LIBFT)/libft.a -lreadline -L /Users/${USER}/.brew/opt/readline/lib
 # =================================================================================

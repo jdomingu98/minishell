@@ -12,6 +12,8 @@
 
 #include "minishell.h"
 
+t_g_state	g_status;
+
 static t_list	*get_command_list(char *input_line, t_data *data)
 {
 	t_list	*tokens_list;
