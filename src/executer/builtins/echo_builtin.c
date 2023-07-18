@@ -6,7 +6,7 @@
 /*   By: atrujill <atrujill@student.42malaga.com>   +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 01:27:43 by atrujill          #+#    #+#             */
-/*   Updated: 2023/07/14 01:27:45 by atrujill         ###   ########.fr       */
+/*   Updated: 2023/07/14 16:53:29 by jdomingu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,12 +28,9 @@ static void	print_echo_string(char **args, int idx)
 {
 	while (args[idx])
 	{
-		if (!check_if_n_flag(args[idx]))
-		{
-			ft_putstr_fd(args[idx], STDOUT_FILENO);
-			if (args[idx + 1])
-				ft_putchar_fd(' ', STDOUT_FILENO);
-		}
+		ft_putstr_fd(args[idx], STDOUT_FILENO);
+		if (args[idx + 1])
+			ft_putchar_fd(' ', STDOUT_FILENO);
 		idx++;
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: atrujill <atrujill@student.42malaga.com>   +#+  +:+       +#+        */
+/*   By: jdomingu <jdomingu@student.42malaga.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/14 01:27:15 by atrujill          #+#    #+#             */
-/*   Updated: 2023/07/14 01:31:07 by atrujill         ###   ########.fr       */
+/*   Updated: 2023/07/14 17:14:55 by jdomingu         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,8 @@ int	execute_with_pipe(t_data *data)
 			exit(execute_input(data, cmd_list));
 		cmd_list = cmd_list->next;
 	}
-	close_pipes(data, 0);
+	cmd_list = data->command_list;
+	close_pipes(data, NULL);
 	cmd_list = data->command_list;
 	while (cmd_list)
 	{
